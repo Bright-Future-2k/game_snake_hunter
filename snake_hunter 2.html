@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>snake</title>
+</head>
+<canvas id="gc" width="400" height="400"></canvas>
+<body>
+<script>
+    window.onload = function () {
+        canvas = document.getElementById("gc");
+        ctx = canvas.getContext("2d");
+        document.addEventListener("keydown", keyPush);
+        setInterval(game, 1000 / 15);
+    };
+    //diem khoi tao snake khi open
+    let px = 10;
+    let py = 10;
+
+
+    let sizeSnake = 20;
+    //dien tich snake
+
+    let tc = 20;
+    //dien tich snake di chuyen
+
+    let appleX = 15;
+    let appleY = 10;
+
+    //diem bat dau ve tiep khoang cach nhau
+    let xv = 0;
+    let yv = 0;
+
+    trail = [];
+    tail = 5;
+
+    //snake move
+    function game() {
+        px += xv;
+        py += yv;
+
+        if (px < 0) {
+            px = tc - 1;
+        }
+        if (px > tc - 1) {
+            px = 0;
+        }
+        if (py < 0) {
+            py = tc - 1;
+        }
+        if (py > tc - 1) {
+            py = 0;
+        }
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "lime";
+        for (let i = 0; i < trail.length; i++) {
+            //ctx.fillRect(ax*gs,ay*gs,gs-2,gs-2);
+            ctx.fillRect(trail[i].x * sizeSnake, trail[i].y * sizeSnake, sizeSnake - 2, sizeSnake - 2);
+            if (trail[i].x === px && trail[i].y === py) {
+                tail = 5;
+            }
+        }
+
+        trail.push({x: px, y: py});
+
+        while (trail.length > tail) {
+            trail.shift();
+        }
+
+        if (appleX === px && appleY === py) {
+            tail++;
+            appleX = Math.floor(Math.random() * tc);
+            appleY = Math.floor(Math.random() * tc);
+        }
+
+        ctx.fillStyle = "red";
+        ctx.fillRect(appleX * sizeSnake, appleY * sizeSnake, sizeSnake - 2, sizeSnake - 2);
+
+    }
+
+    function keyPush(evt) {
+        switch (evt.which) {
+            case 37:
+                xv = -1;
+                yv = 0;
+                break;
+            case 38:
+                xv = 0;
+                yv = -1;
+                break;
+            case 39:
+                xv = 1;
+                yv = 0;
+                break;
+            case 40:
+                xv = 0;
+                yv = 1;
+                break;
+        }
+    }
+</script>
+</body>
+</html>
